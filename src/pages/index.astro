@@ -1,81 +1,127 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
-	</main>
+<Layout title="Mi Mar Mental">
+  <main onselectstart="return false">
+    <h1>Mi Mar Mental</h1>
+    <h1><span class="text-gradient">Escribe a ciegas sin parar</span></h1>
+    <p class="instructions">
+      Si dejas de escribir por 3 segundos, perderás todo lo escrito.<br />
+      No vas a poder copiar (aunque puedas seleccionar el texto).<br />
+      Máximo 500 caracteres.<br />
+      Una vez termines, persiona el botón <strong>Finalizar</strong>.
+    </p>
+    <textarea
+      id="text"
+      rows="5"
+      maxlength="500"
+      placeholder="Escribe lo que sientas ahora mismo..."
+      onselectstart="return false"
+      onpaste="return false"
+      oncopy="return false"
+      oncut="return false"
+      ondrag="return false"
+      ondrop="return false"
+      autocomplete="off"
+      spellcheck="false"></textarea>
+
+    <input type="hidden" id="finish" />
+    <button onclick="downloadImage()">Finalizar</button>
+    <br />
+    <br />
+    <canvas id="textCanvas" height="20" hidden></canvas>
+    <img id="image" hidden />
+  </main>
+  <script is:inline>
+    var tCtx = document.getElementById("textCanvas").getContext("2d"),
+      imageElem = document.getElementById("image");
+
+    document.getElementById("text").addEventListener(
+      "keyup",
+      function () {
+        tCtx.canvas.width = tCtx.measureText(this.value).width;
+        tCtx.fillText(this.value, 0, 10);
+        imageElem.src = tCtx.canvas.toDataURL();
+        const img = document.getElementById("finish");
+        img.value = imageElem.src;
+      },
+      false
+    );
+
+    function debugBase64(base64URL) {
+      var win = window.open();
+      win.document.write(
+        '<iframe src="' +
+          base64URL +
+          '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>'
+      );
+    }
+
+    function downloadImage() {
+      const img = document.getElementById("finish");
+      console.log("img.value: ", img.value);
+      debugBase64(img.value);
+    }
+  </script>
 </Layout>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
+  main {
+    margin: auto;
+    padding: 1.5rem;
+    max-width: 60ch;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+  textarea {
+    width: 90%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    color: white;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    resize: vertical;
+  }
+  button {
+    margin-top: 0.5rem;
+    font-family: Roboto, sans-serif;
+    font-weight: 100;
+    font-size: 16px;
+    color: #fff;
+    background-color: #0066cc;
+    padding: 10px 30px;
+    border: 2px solid #0066cc;
+    box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+    border-radius: 50px;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  button:hover {
+    transition: 1000ms;
+    padding: 10px 30px;
+    transform: translateY(-0px);
+    background-color: #fff;
+    color: #0066cc;
+    border: solid 2px #0066cc;
+  }
 </style>
