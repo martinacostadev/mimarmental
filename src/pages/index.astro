@@ -30,8 +30,8 @@ import Layout from "../layouts/Layout.astro";
     <button onclick="downloadImage()">Finalizar</button>
     <br />
     <br />
-    <canvas id="textCanvas" height="20"></canvas>
-    <img id="image" />
+    <canvas id="textCanvas" height="20" hidden></canvas>
+    <img id="image" hidden />
   </main>
   <script is:inline>
     var tCtx = document.getElementById("textCanvas").getContext("2d"),
