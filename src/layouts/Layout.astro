@@ -35,7 +35,15 @@ const { title } = Astro.props;
   }
   html {
     font-family: system-ui, sans-serif;
-    background-color: #f6f6f6;
+    background: linear-gradient(to bottom, #001e60, #002981);
+    /* Use the following to make it cover the whole viewport */
+    background-attachment: fixed;
+    /* Set the background size to cover the entire element */
+    background-size: cover;
+    /* Center the background vertically and horizontally */
+    background-position: center;
+    margin: 0; /* Remove default margin on body */
+    height: 100vh; /* Set the body to fill the viewport height */
   }
   code {
     font-family: Menlo, Monaco, Lucida Console, Liberation Mono,

@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="...">
+<Layout title="¿En qué pienso?">
   <main onselectstart="return false">
     <!-- <h1>Mi Mar Mental</h1>
     <h1><span class="text-gradient">Escribe a ciegas sin parar</span></h1>
@@ -14,8 +14,8 @@ import Layout from "../layouts/Layout.astro";
     </p> -->
     <textarea
       id="text"
-      rows="5"
-      maxlength="500"
+      rows="1"
+      maxlength="800"
       onselectstart="return false"
       onpaste="return false"
       oncopy="return false"
@@ -26,8 +26,11 @@ import Layout from "../layouts/Layout.astro";
       spellcheck="false"></textarea>
 
     <input type="hidden" id="finish" />
-    <button onclick="downloadImage()">Finalizar</button>
+    <div class="buttons">
+      <button onclick="downloadImage()">Finalizar</button>
+    </div>
     <br />
+    <audio id="audioPlayer" src="/music/de-seu.mp3"></audio>
     <br />
     <canvas id="textCanvas" height="20" hidden></canvas>
     <img id="image" hidden />
@@ -46,12 +49,22 @@ import Layout from "../layouts/Layout.astro";
         imageElem.src = "";
         var textarea = document.getElementById("text");
         text.value = "";
+
+        var audio = document.getElementById("audioPlayer");
+        audio.pause();
+        audio.currentTime = 0; // Rewind the audio to the beginning
       }, 3000);
     }
 
     document.getElementById("text").addEventListener(
       "keyup",
       function () {
+        var audio = document.getElementById("audioPlayer");
+        audio.volume = 0.4; // Set the volume to 40%
+        if (audio.paused) {
+          audio.play();
+        }
+
         clearTimeout(timeOutId);
         tCtx.canvas.width = tCtx.measureText(this.value).width;
         tCtx.fillText(this.value, 0, 10);
@@ -100,16 +113,26 @@ import Layout from "../layouts/Layout.astro";
     background-position: 0%;
   }
   textarea {
-    width: 90%;
+    font-size: 16px;
+    width: 100%;
     padding: 0.75rem;
     border-radius: 0.5rem;
-    color: white;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    resize: vertical;
+    resize: none;
+    box-shadow: none;
+    white-space: pre;
+    overflow: hidden;
+    margin-right: 16px;
+    box-sizing: border-box;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
   }
   button {
     margin-top: 0.5rem;
